@@ -1,4 +1,4 @@
-package com.example.disenyinterficiesexercises
+package com.example.Nullability
 
 import kotlin.random.Random
 
@@ -14,33 +14,48 @@ fun main()
 //    n?.plus(i) === null
 //    n ?: 0 === 0
 //    (n?:0) + 3 === 3
-//    n + i === error
-//    i + j === 611
+//    n + i === error --> (n?:0) + i === i
+//    i + j === error --> i + (j?:0) === 611
 //    s + n === error
-//    l1[2] + 3 = 5
+//    l1[2] + 3 = error --> (l1[2]?:0) + 3 = 5
 //    l2[2] + 3 = 5
 
 //Exercise 2
+    println("Exercise 2: ")
     val resultSum = nullSafetySum(null, 5)
     println(resultSum)
 
     //    val list: List<Int?>? = null
     val list: List<Int?>? = listOf(1,2,null,6, 7)
 
+    println()
 //Exercise 3
+    println("Exercise 3: ")
     val resultAverage = nullSafetyAverage(list)
     println(resultAverage)
 
+    println()
 //Exercise 4
+    println("Exercise 4: ")
     val resultNull = nullControlAverage(list)
     println(resultNull)
 
+    println()
 //Exercise 5
-    println("Odd Exercise")
+    println("Exercise 5: Odd Exercise")
 
     val listOdd: List<Int?> = listOf(1,2,5,6, 7, 13 , null)
 
     printOnlyOdds(listOdd)
+
+//Exercise 6
+    println("Exercise 6:")
+
+    val matrixNullable:List<List<Int?>> = listOf(
+                                            listOf(1, 20, null),
+                                            listOf(2, null)
+                                                )
+    println(replaceNulls(matrixNullable))
 }
 
 //Exercise 2
@@ -52,18 +67,19 @@ fun nullSafetySum(a: Int?, b:Int?):Int
 //Exercise 3
 fun nullSafetyAverage(list: List<Int?>?):Double
 {
-    if(list == null) return 0.0
+    if(list.isNullOrEmpty()) return 0.0
 
     var count = 0
-    var value = 0.0
+    var value = 0
 
-    for (i in 0 until (list?.size ?: 0))
+    for (i in list.indices)
     {
-        value = value.plus(list?.elementAtOrNull(i)?.toDouble() ?:0.0)
-        count++;
+        value += list[i]?:0
+        if(list[i] != null)
+            count++;
     }
 
-    return value.div(count)
+    return value.toDouble().div(count)
 }
 
 //Exercise 4
@@ -74,10 +90,9 @@ fun nullControlAverage(list: List<Int?>?):Double?
     var count = 0
     var value = 0.0
 
-    for (i in 0 until (list?.size ?: 0))
+    for (i in list.indices)
     {
-        if(list.elementAtOrNull(i) == null) return null
-        value = value.plus(list.elementAtOrNull(i)?.toDouble() ?: 0.0)
+        value += list[i] ?: return null
         count++;
     }
 
@@ -87,7 +102,7 @@ fun nullControlAverage(list: List<Int?>?):Double?
 //Exercise 5
 fun printOnlyOdds(list:List<Int?>)
 {
-    for (i in 0 until list.size)
+    for (i in list.indices)
     {
         if((list?.elementAtOrNull(i)?: 0.0).toDouble().mod(2.0) == 1.0) println(list.elementAtOrNull(i))
     }
@@ -97,15 +112,11 @@ fun printOnlyOdds(list:List<Int?>)
 fun replaceNulls(matrix: List<List<Int?>>):List<List<Int>>
 {
     val mutableList : MutableList<MutableList<Int>> = mutableListOf()
-    for (i in 0 until matrix.size)
-    {
-        for (j in 0 until matrix[i].size)
-        {
-            mutableList[i].add(matrix[i]?.elementAtOrNull(j) ?: Random.nextInt())
+    for (i in matrix.indices) {
+        mutableList.add(mutableListOf())
+        for (j in matrix[i].indices) {
+            mutableList[i].add(matrix[i][j] ?: Random.nextInt(0, 200))
         }
-
     }
-    val returnMatrix :List<List<Int>> = mutableList
-
-    return returnMatrix
+    return mutableList
 }
