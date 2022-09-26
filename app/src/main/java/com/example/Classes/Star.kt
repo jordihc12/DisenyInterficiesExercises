@@ -1,13 +1,18 @@
 package com.example.Classes
 
-class Star (distancetoEarth: Double, positionInSky: Double, name: String, var todaySurfaceTemperature: Double, val coreTemperature: Double) :
-    CelestialBody(distancetoEarth, positionInSky, false, name)
+import kotlin.random.Random
+
+class Star (distanceToEarth: Double,
+            positionInSky: Double,
+            name: String,
+            var todaySurfaceTemperature: Double,
+            val coreTemperature: Double,
+            var belongsTo: Galaxy?) :
+    CelestialBody(distanceToEarth, positionInSky, false, name)
 {
     private fun countNumberOfPlanetsOnOrbit() : Int
     {
-        var numOfPlanets: Int = 0
-
-        return numOfPlanets
+        return Random.nextInt()
     }
 
     override fun printName()
